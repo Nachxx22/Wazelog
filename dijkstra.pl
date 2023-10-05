@@ -1,4 +1,6 @@
 %Definir arcos y distancias entre nodos
+
+grafo(cachi,cervantes,7).
 grafo(cachi,turrialba,40).
 grafo(cachi,paraiso,10).
 grafo(cachi,orosi,12).
@@ -29,30 +31,9 @@ grafo(tresrios,pacayas,15).
 grafo(turrialba,cachi,40).
 grafo(turrialba,pacayas,18).
 
-%[[[a,b,c,d,e],11],[[a,b,c,e],8],[[a,b,d,e],11],[[a,c,d,e],7],[[a,c,e],4]]
-%[sanjosé,orosi,turrialba,tresríos]
-%[[sanjosé,orosi],[orosi,turrialba],[turrialba,tresríos]]
+%Caso de prueba: [sanjosé,orosi,turrialba,tresríos]
 
-%aqui tengo un problema, no se está leyendo la primera sublista.
-resultado([]).
-resultado([[X,Y]|Resto]):-dijkstra(X,Y),resultado(Resto).
-
-%write("Este es X ": X),nl,write("Este es Y ": Y),nl,
-
-%resultado([[X,Y]|Lista]):-write(X),nl,write(Y),nl,write(Lista).
-
-
-% Entradas: Una lista que contiene el origen, destinos intermedios y el
-% destino final
-% Utilidad: Estas 3 reglas permiten crear la lista con sublistas
-% para utilizar el dijkstra.
-% Salida: Una lista de sublistas para ser utilizada en el dijkstra
-%
-crear_sublistas([],[]). %Este es el caso en el que ambas listas estan vacias entonces se debe detener.
-crear_sublistas([_],[]). %En este caso se verifica cuando en la lista original queda solo 1 elemento.
-
-crear_sublistas([X, Y| Resto], [[X, Y] | SublistasResto]) :-
-    crear_sublistas([Y| Resto], SublistasResto), muestra(SublistasResto). %En esta regla se realiza la recursion.
+muestra_rutas([X,Y]):-write("La ruta es ":X), write(" y el costo es de ":Y).
 
 
 % Entrada: Una lista que contiene sublista, cada sublitas tiene 2
@@ -72,48 +53,34 @@ min_lista([[_, Numero] | Resto], Min) :-
     Min = [MinLista, MinNumero].
 
 
+% Esta regla es la que ayuda a encontrar el camino mas corto
+posibles_rutas(Origen, Destino, Ruta, Longitud) :-
+    posibles_rutas(Origen, Destino, [Origen], Ruta_acomodada, Longitud), reverse(Ruta,Ruta_acomodada). %Se usa reverse porque sino la ruta va a quedar ordenada al reves, o sea de destino a origen
 
-% Predicado para encontrar el camino más corto
-shortest_path(Start, End, Path, Length) :-
-    shortest_path(Start, End, [Start], Path1, Length), reverse(Path,Path1).
+% En este hecho se verifica cuando se llega al caso de parada.
+posibles_rutas(Destino, Destino, Ruta, Ruta, 0).
 
-% Caso base: cuando llegamos al destino
-shortest_path(End, End, Path, Path, 0).
+% Este es el caso recursivo para encontrar el camino más corto
+posibles_rutas(Origen, Destino, Visitados, Ruta, Longitud) :-
+    grafo(Origen, X, D),                % Encontrar un vecino X
+    \+ member(X, Visitados),            % Asegurarse de que X no esté en la lista visitada
+    posibles_rutas(X, Destino, [X|Visitados], Ruta, Rest_longitud),   % Recursión
+    Longitud is D + Rest_longitud.
 
-% Caso recursivo: encontrar el camino más corto
-shortest_path(Start, End, Visited, Path, Length) :-
-    grafo(Start, X, D),                % Encontrar un vecino X
-    \+ member(X, Visited),            % Asegurarse de que X no esté en la lista visitada
-    shortest_path(X, End, [X|Visited], Path, RestLength),   % Recursión
-    Length is D + RestLength.
-
-
-dijkstra(Origen,Destino):-findall([Ruta,Costo],shortest_path(Origen, Destino, Ruta, Costo),Rutas), min_lista(Rutas, RutaMin), muestra_rutas(RutaMin).
-
-muestra_rutas([X,Y]):-write("La ruta es: "),lista_a_cadena(X, Cadena),write(Cadena), write(" y el costo es de ":Y).
-
-% Predicado para concatenar dos listas
-concatenar([], Lista, Lista).
-concatenar([X|Resto1], Lista2, [X|Resto3]) :-
-    concatenar(Resto1, Lista2, Resto3).
+% Esta es la llamada del dijkstra que junto con findall encuentra todas
+% las rutas posibles, y usa a min_lista para escoger la mas corta y
+% mostrarla con muestra_rutas.
+dijkstra(Origen,Destino):-findall([Ruta,Costo], posibles_rutas(Origen, Destino, Ruta, Costo),Rutas), min_lista(Rutas, RutaMin), muestra_rutas(RutaMin).
 
 
-iniciardikstra([]).
-iniciardikstra([X,Y|Resto]):-dijkstra(X,Y),nl,iniciardikstra([Y|Resto]).
+% Entrada: Recibe una lista que contiene el origen, destinos intermedios
+% y destino
+% Esta es la llamada inicial que ejecuta el dijkstra
+% Salida: Muestra el resultado en consola de la ruta mas corta con su
+% distancia respectiva.
+iniciar_dijkstra([]).
+iniciar_dijkstra([X,Y|Resto]):-dijkstra(X,Y),nl,iniciar_dijkstra([Y|Resto]).
 
-% Predicado para convertir una lista en una cadena
-lista_a_cadena([], '').
-lista_a_cadena([X], Atom) :- atom_number(Atom, X).
-lista_a_cadena([X|Resto], Cadena) :-
-    atom_number(Atom, X),
-    lista_a_cadena(Resto, RestoCadena),
-    atomic_concat(Atom, ', ', AtomComa),
-    atomic_concat(AtomComa, RestoCadena, Cadena).
-
-% Ejemplo de uso
-%?- Lista = [1, 2, 3],
-%   lista_a_cadena(Lista, Cadena),
-%   write(Cadena).
 
 
 
