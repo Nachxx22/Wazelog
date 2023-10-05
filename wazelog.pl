@@ -18,8 +18,11 @@ navegador fiable.Por favor digame donde se encuentra:'),nl,
  concatenado(X,[Result2],Y),nl,
  write(Y),
  %iniciardikstra(Y),nl,
+
+ %Para mostrar el tiempo estimado de la ruta
  tiempoestimado(20,TiempoEstimado),
  writeln(TiempoEstimado),
+ %Para mostar el tiempo estimado en presa de la ruta
  tiempopresa(TiempoEstimado,TiempoPresa),
  writeln(TiempoPresa),
  write('su consulta ha sido exitosa, que tenga un bonito viaje').
