@@ -1,6 +1,6 @@
 %importaciones de archivos:
 :- consult('BNF.pl').
-:-consult('dijkstra.pl').
+:- consult('dijkstra.pl').
 :- consult('reloj.pl').
 
 %regla para iniciar el programa:
@@ -17,14 +17,8 @@ navegador fiable.Por favor digame donde se encuentra:'),nl,
  concatenado([Result1],Lista_resultado,X),
  concatenado(X,[Result2],Y),nl,
  write(Y),
+ inicia_dijkstra(Y),nl,
  %iniciardikstra(Y),nl,
-
- %Para mostrar el tiempo estimado de la ruta
- tiempoestimado(20,TiempoEstimado),
- writeln(TiempoEstimado),
- %Para mostar el tiempo estimado en presa de la ruta
- tiempopresa(TiempoEstimado,TiempoPresa),
- writeln(TiempoPresa),
  write('su consulta ha sido exitosa, que tenga un bonito viaje').
 % ###########################################################################3
 % HECHOS NECESARIOS PARA EL FUNCIONAMIENTO DEL PROGRAMA:
@@ -56,6 +50,10 @@ ubicacion(orosi).
 ubicacion(cachi).
 ubicacion(juanvinas).
 ubicacion(turrialba).
+ubicacion(sanjose).
+
+
+
 destino_general([X|_],X):-lugar(X),!. %elimine la linea de arriba
 %EL PROGRAMA DEBERIA DE TERMINAR ACA.
 destino_general([_|Entrada],Salida):-destino_general(Entrada,Salida).
@@ -106,7 +104,7 @@ tomar_decision(Lista_Destino,Lista_resultado,Numero):-not(decision(Lista_Destino
 %#######################################################33
 %funcion que une un elemento con una lista
 concatenado([],L,L).
-concatenado([X|L1],L2,[X|L3]):-concatenar(L1,L2,L3).
+concatenado([X|L1],L2,[X|L3]):-concatenado(L1,L2,L3).
 
 % condicion que pregunta cual panaderia,gasolinera,etc, pregunta donde
 % se ubica.

@@ -62,6 +62,7 @@ adjetivo([posicionado|S],S).
 adjetivo([establecido|S],S).
 adjetivo([localizado|S],S).
 adjetivo([instalado|S],S).
+adjetivo([ubicado|S],S).
 
 %Hechos para sustantivos
 sustantivo([destino|S],S).
