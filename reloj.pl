@@ -2,8 +2,8 @@
 convertirHora(Hora) :-
     get_time(Tiempo), %Para obtener la hora de la computadora
     stamp_date_time(Tiempo, FechaHora, 'UTC'), %Esto es para obetener la FechaHora que nos sirve para encontar la hora que esta en el dia, importante agarra el horario UTC que es diferente a costa rica
-    date_time_value(hour, FechaHora, Hora24),
-    date_time_value(minute, FechaHora, Minutos),  %Esto nos da la hora en formato de hora en integer siendo esta de 0 a 23
+    date_time_value(hour, FechaHora, Hora24), %Esto nos da la hora en formato de hora militar, siendo en integer desde 0 a 23
+    date_time_value(minute, FechaHora, Minutos),  %Esto nos da la los minutos de la hora en formato de minutos en integer siendo esta de 0 a 59
     Hora is Hora24 ,writeln('La hora actual es: '),writeln(Hora:Minutos).%Para que la hora sea igual que la de Costa rica en Hora is Hora24 hay que restarle 6, quedando Hora is Hora24 - 6
 
 % Predicado para multiplicar un dato por otro dato dependiendo de si la hora es menor o mayor que 12
