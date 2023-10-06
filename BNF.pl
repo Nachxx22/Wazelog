@@ -14,7 +14,6 @@ nodo([cachi|S],S).
 nodo([orosi|S],S).
 nodo([juanvinas|S],S).
 
-nodo(cartago).
 %Hechos de los saludos posibles
 saludo([hola|S],S).
 saludo([buenosdias|S],S).

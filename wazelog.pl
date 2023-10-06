@@ -5,13 +5,13 @@
 
 %regla para iniciar el programa:
 leer([]):-write('bienvenido a wazelog, su
-navegador fiable.Por favor digame donde se encuentra:'),nl,
+navegador fiable.Por favor digame donde se encuentra: '),nl,
  read_line_to_string(user_input, String), tokenize_atom(String, Lista_result),%consulta el origen
  consulta_inicial(Lista_result,Result1),
  write('Excelente, estamos en: '),write( Result1),nl,write('favor digite su destino'),nl,
  read_line_to_string(user_input, String2), tokenize_atom(String2, Lista_result2),%consulta el destino.
  consulta_inicial(Lista_result2,Result2),nl,write('Perfecto, vamos hacia '),write(Result2),nl,
- write('Existe algun destino intermedio?, favor dijite no en caso de que no haya, en caso contrario favor dijite el destino intermedio'),nl,
+ write('Existe algun destino intermedio?, favor digite no en caso de que no haya, en caso contrario favor dijite el destino intermedio'),nl,
  read_line_to_string(user_input, String3), tokenize_atom(String3, SIONO),
  tomar_decision(SIONO,Lista_resultado,0),
  concatenado([Result1],Lista_resultado,X),
@@ -66,7 +66,7 @@ destino_general([_|Entrada],Salida):-destino_general(Entrada,Salida).
 % INICIACION################################################
 consulta_inicial(Lista,Pclave):-oracion(Lista,[]),destino_general(Lista,Pclave),!. %caso 1, la palabra clave es un lugar general
 consulta_inicial(Lista,Pclave):-oracion(Lista,[]),ubicaciones(Lista,Pclave),!.%caso 2, la palabra clave es un lugar intermedio.
-consulta_inicial(Lista,Pclave):- write('no entendi a que se referia con'),nl,write(Lista),nl,
+consulta_inicial(Lista,Pclave):- write('no entendi a que se referia con: '),nl,write(Lista),nl,
     write('favor redigite su consulta de otra manera'),nl,
     read_line_to_string(user_input, X), tokenize_atom(X, Lista2),
     consulta_inicial(Lista2,Pclave). %esto deberia de estar bien.
@@ -75,17 +75,17 @@ consulta_inicial(Lista,Pclave):- write('no entendi a que se referia con'),nl,wri
 procesar_consulta(Lista,Lista2,NUMBER):-oracion(Lista,[]),destino_general(Lista,Pclave),consultarlugar(Pclave,Lista2,NUMBER),!.%busca una palabra clave tal que
 %pulperia, gasolinera
 procesar_consulta(Lista,[X|Y],NUMBER):-oracion(Lista,[]),ubicaciones(Lista,X),NUM1 is NUMBER+1, consultarintermedio([X|Y],NUM1),!.
-procesar_consulta(Lista,[],NUMBER):- write('no entendi a que se referia con'),nl,write(Lista),nl,
+procesar_consulta(Lista,[],NUMBER):- write('no entendi a que se referia con: '),nl,write(Lista),nl,
     write('favor redigite su consulta de otra manera'),nl,
     read_line_to_string(user_input, X), tokenize_atom(X, Lista2),
     procesar_consulta(Lista2,Pclave,NUMBER), %esto deberia de estar bien.
-    write('su consulta es:'),write(Pclave).
+    write('su consulta es: '),write(Pclave).
 % #############################################FIN CONSULTAR
 % INTERMEDIOS########################################
 % CONSULTAR LUGARES GENERALES (PANADERIA GASOLNERA ETC).
 % #################################
-consultarlugar(Pclave,[],NUM):-maximo(NUM), write('perfecto, se ha calculado la ruta'),nl,write(Pclave),!.
-consultarlugar(Pclave,Lista,NUM):-write('indiqueme donde se encuentra tal'),write(Pclave),nl,
+consultarlugar(Pclave,[],NUM):-maximo(NUM), write('perfecto, se ha calculado la ruta: '),nl,write(Pclave),!.
+consultarlugar(Pclave,Lista,NUM):-write('indiqueme donde se encuentra tal '),write(Pclave),nl,
     read_line_to_string(user_input, Z), tokenize_atom(Z, Lista2),procesar_consulta(Lista2,Lista,NUM).
 % ----------------------------------------------------------------------
 % %CONSULTA LUGARES ESPECIFICOS EN EL GRAFO
@@ -94,8 +94,8 @@ ubicaciones([_|Entrada],Salida):-ubicaciones(Entrada,Salida).
 %#####################################################################3
 % CODIGO DE CONSULTA DE INTERMEDIOS, SIMILAR A CONSULTAR LUGARES PERO
 % DIRECTAMENTE EL USUARIO LE INGRESA UN LUGAR DEL GRAFO
-consultarintermedio([Pclave|[]],NUM):-maximo(NUM), write('perfecto, SE va a concluir con su ultima consulta'),nl,write(Pclave),!.
-consultarintermedio([X|Y],NUM):-write('Excelente, existe otro destino aparte de'),write(X), write(' que desea ir? Favor digitelo'),nl,read_line_to_string(user_input, Z), tokenize_atom(Z, Lista),tomar_decision(Lista,Y,NUM).
+consultarintermedio([Pclave|[]],NUM):-maximo(NUM), write('perfecto, se va a concluir con su ultima consulta: '),nl,write(Pclave),!.
+consultarintermedio([X|Y],NUM):-write('Excelente, existe otro destino aparte de '),write(X), write(' que desea ir? Favor digitelo '),nl,read_line_to_string(user_input, Z), tokenize_atom(Z, Lista),tomar_decision(Lista,Y,NUM).
 % ########################################################################
 % ##############3
 %#CODIGO QUE INICIA EL PROCESO DE BUSCAR DESTINOS INTERMEDIOS O NO%
