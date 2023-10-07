@@ -8,19 +8,19 @@ leer([]):-write('bienvenido a wazelog, su
 navegador fiable.Por favor digame donde se encuentra: '),nl,
  read_line_to_string(user_input, String), tokenize_atom(String, Lista_result),%consulta el origen
  consulta_inicial(Lista_result,Result1),
- write('Excelente, estamos en: '),write( Result1),nl,write('favor digite su destino'),nl,
+ write('Excelente, estamos en: '),write( Result1),nl,write('favor digite su destino. '),nl,
  read_line_to_string(user_input, String2), tokenize_atom(String2, Lista_result2),%consulta el destino.
- consulta_inicial(Lista_result2,Result2),nl,write('Perfecto, vamos hacia '),write(Result2),nl,
- write('Existe algun destino intermedio?, favor digite no en caso de que no haya, en caso contrario favor dijite el destino intermedio'),nl,
+ consulta_inicial(Lista_result2,Result2),nl,write('Perfecto, vamos hacia: '),write(Result2),nl,
+ write('Existe algun destino intermedio?, favor digite no en caso de que no haya, en caso contrario favor digite el destino intermedio.  '),nl,
  read_line_to_string(user_input, String3), tokenize_atom(String3, SIONO),%linea que consulta si existen destinos intermedios
  tomar_decision(SIONO,Lista_resultado,0), %linea que retorna la lista resultado de destinos intermedios, en caso de que el usuario
  %diga que no , retorna vacio.
  concatenado([Result1],Lista_resultado,X),%concatena el origen con la lista resultado
- concatenado(X,[Result2],Y),nl,write('la lista intermedia es:'),nl,%concatena el origen y la lista resultado con el destino
+ concatenado(X,[Result2],Y),nl,write('la lista intermedia es: '),nl,%concatena el origen y la lista resultado con el destino
  write(Y),
  inicia_dijkstra(Y),nl,%proceso que inicia el dikstra.
  %iniciardikstra(Y),nl,
- write('su consulta ha sido exitosa, que tenga un bonito viaje'),!.
+ write('su consulta ha sido exitosa, que tenga un bonito viaje. '),!.
 % ###########################################################################3
 % HECHOS NECESARIOS PARA EL FUNCIONAMIENTO DEL PROGRAMA:
 maximo(3). %MAXIMO 3 DESTINOS INTERMEDIOS
@@ -67,8 +67,8 @@ destino_general([_|Entrada],Salida):-destino_general(Entrada,Salida).
 % INICIACION################################################
 consulta_inicial(Lista,Pclave):-oracion(Lista,[]),destino_general(Lista,Pgeneral),consultarlugar_inicial(Pgeneral,Pclave),!. %caso 1, la palabra clave es un lugar general
 consulta_inicial(Lista,Pclave):-oracion(Lista,[]),ubicaciones(Lista,Pclave),!.%caso 2, la palabra clave es un lugar intermedio.
-consulta_inicial(Lista,Pclave):- write('no entendi a que se referia con '),write(Lista),nl,
-    write('favor redigite su consulta de otra manera'),nl,
+consulta_inicial(Lista,Pclave):- write('no entendi a que se referia con: '),write(Lista),nl,
+    write('favor redigite su consulta de otra manera. '),nl,
     read_line_to_string(user_input, X), tokenize_atom(X, Lista2),
     consulta_inicial(Lista2,Pclave). %la linea anterior es para cuando prolog no comprendio la palabra clave o
 % no pasa el bnf ,solicita al usuario que escriba de nuevo la respuesta y
@@ -84,10 +84,10 @@ procesar_consulta(Lista,Lista2,NUMBER):-oracion(Lista,[]),destino_general(Lista,
 % consultas a destinos intermedio, max 3
 procesar_consulta(Lista,[X|Y],NUMBER):-oracion(Lista,[]),ubicaciones(Lista,X),NUM1 is NUMBER+1, consultarintermedio([X|Y],NUM1),!.
 procesar_consulta(Lista,Lista2,NUMBER):- write('no entendi a que se referia con: '),nl,write(Lista),nl,
-    write('favor redigite su consulta de otra manera'),nl,
+    write('favor redigite su consulta de otra manera. '),nl,
     read_line_to_string(user_input, X), tokenize_atom(X, Listas),
     procesar_consulta(Listas,Lista2,NUMBER), %esto deberia de estar bien.
-    write('la palabra clave es:').
+    write('la palabra clave es: ').
 % #############################################FIN CONSULTAR
 % INTERMEDIOS########################################
 % CONSULTAR LUGARES GENERALES (PANADERIA GASOLNERA ETC).
@@ -99,7 +99,7 @@ consultarlugar_inicial(Pclave,Respuesta):-write('digame donde se encuentra tal '
 % LAS 2 LINEAS DE ABAJO ES PARA EL FLUJO DE INFORMACION RESPECTO A
 % LUGARES INTERMEDIOS, BUSCA FORZAR AL USUARIO A ESPECIFICAR UN LUGAR
 % DADA UNA RESPUESTA CON LUGARES GENERALES(panaderia,gasolinera)etc.
-consultarlugar(Pclave,[],NUM):-maximo(NUM), write('perfecto, se ha calculado la ruta: '),nl,write(Pclave),!.
+consultarlugar(Pclave,[],NUM):-maximo(NUM), write('Perfecto, se ha calculado la ruta: '),nl,write(Pclave),!.
 %caso donde maximo sea 3 , esto es condicion de parada.
 consultarlugar(Pclave,Lista,NUM):-write('indiqueme donde se encuentra tal '),write(Pclave),nl,
     read_line_to_string(user_input, Z), tokenize_atom(Z, Lista2),procesar_consulta(Lista2,Lista,NUM).
@@ -111,7 +111,7 @@ ubicaciones([_|Entrada],Salida):-ubicaciones(Entrada,Salida).
 % CODIGO DE CONSULTA DE INTERMEDIOS, SIMILAR A CONSULTAR LUGARES PERO
 % DIRECTAMENTE EL USUARIO LE INGRESA UN LUGAR DEL GRAFO
 consultarintermedio([Pclave|[]],NUM):-maximo(NUM), write('perfecto, se va a concluir con su ultima consulta: '),nl,write(Pclave),!.
-consultarintermedio([X|Y],NUM):-write('Excelente, existe otro destino aparte de '),write(X), write(' que desea ir? Favor digitelo '),nl,read_line_to_string(user_input, Z), tokenize_atom(Z, Lista),tomar_decision(Lista,Y,NUM).
+consultarintermedio([X|Y],NUM):-write('Excelente, existe otro destino aparte de '),write(X), write(' que desea ir? por favor digitelo '),nl,read_line_to_string(user_input, Z), tokenize_atom(Z, Lista),tomar_decision(Lista,Y,NUM).
 % ########################################################################
 % ##############3
 %#CODIGO QUE INICIA EL PROCESO DE BUSCAR DESTINOS INTERMEDIOS O NO%
